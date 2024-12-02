@@ -1,0 +1,215 @@
+{
+  "log": {
+    "access": "",
+    "error": "",
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "tag": "socks",
+      "port": 10808,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "routeOnly": false
+      },
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "allowTransparent": false
+      }
+    },
+    {
+      "tag": "http",
+      "port": 10809,
+      "listen": "127.0.0.1",
+      "protocol": "http",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "routeOnly": false
+      },
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "allowTransparent": false
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "proxyA",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "62.3.15.77",
+            "port": 31751,
+            "users": [
+              {
+                "id": "2ff449dd-819d-4fe4-fe43-d41e051d76c1",
+                "alterId": 0,
+                "email": "t@t.tt",
+                "security": "auto",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "www.icloud.com",
+          "fingerprint": "chrome",
+          "show": false,
+          "publicKey": "W9BjX6YmCIVsjhKMlz233Yoe0xcf0SVHfvPKqbf3vCg",
+          "shortId": "",
+          "spiderX": ""
+        }
+      },
+      "mux": {
+        "enabled": false,
+        "concurrency": -1
+      }
+    },
+    {
+      "tag": "proxyB",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "ningbo.ednovas.org",
+            "port": 22222,
+            "users": [
+              {
+                "id": "662004b1-aacb-40b0-86b6-2087bd535383",
+                "alterId": 0,
+                "email": "t@t.tt",
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp"
+      },
+      "mux": {
+        "enabled": false,
+        "concurrency": -1
+      },
+      "proxySettings": {
+        "tag": "proxyA"
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      }
+    }
+  ],
+  "dns": {
+    "hosts": {
+      "dns.google": "8.8.8.8",
+      "proxy.example.com": "127.0.0.1"
+    },
+    "servers": [
+      {
+        "address": "223.5.5.5",
+        "domains": [
+          "geosite:cn",
+          "geosite:geolocation-cn"
+        ],
+        "expectIPs": [
+          "geoip:cn"
+        ]
+      },
+      "1.1.1.1",
+      "8.8.8.8",
+      "https://dns.google/dns-query"
+    ]
+  },
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api"
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "domain": [
+          "taobao.com",
+          "qq.com",
+          "oray.com",
+          "ip138.com",
+          "im.cgmoli.org",
+          "pay.kfleiquan.top",
+          "joosam.com",
+          "kfleiquan.top",
+          "gitee.com",
+          "syt.yunqs.com",
+          "thinkphp.cn"
+        ]
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "ip": [
+          "geoip:private",
+          "120.237.60.204",
+          "103.40.13.76",
+          "111.180.189.212",
+          "47.244.176.190",
+          "111.173.106.178",
+          "27.25.158.37",
+          "27.25.147.136",
+          "27.25.142.207",
+          "192.168.111.102",
+          "192.168.111.101"
+        ]
+      },
+      {
+        "type": "field",
+        "port": "0-65535",
+        "network": "tcp,udp",
+        "inboundTag": [
+          "socks",
+          "http",
+          "socks2",
+          "http2"
+        ],
+        "outboundTag": "proxyB",
+        "protocol": [
+          "http",
+          "tls",
+          "bittorrent"
+        ]
+      }
+    ]
+  }
+}
